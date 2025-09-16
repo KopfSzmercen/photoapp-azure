@@ -2,5 +2,6 @@
   "location": { "value": "polandcentral" },
   "env": { "value": "dev" },
   "prefix": { "value": "photoapp" },
-  "apiAlwaysOn": { "value": false }
+  "apiAlwaysOn": { "value": false },
+  "databaseName": { "value": "photoapp" }
 }

@@ -1,6 +1,7 @@
 param prefix string
 param env string
 param location string
+param databaseName string
 
 var accountName = toLower('${prefix}${env}cosmos')
 
@@ -26,10 +27,10 @@ resource cosmos 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
 
 resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-04-15' = {
   parent: cosmos
-  name: 'photoapp'
+  name: databaseName
   properties: {
     resource: {
-      id: 'photoapp'
+      id: databaseName
     }
   }
 }

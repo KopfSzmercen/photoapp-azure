@@ -2,6 +2,8 @@ param principalId string
 param storageId string
 param kvId string
 param cosmosId string
+param databaseName string
+param identityPrincipalId string
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' existing = {
   name: storageId
@@ -37,12 +39,12 @@ resource kvRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
 }
 
 
-resource cosmosRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(cosmosId, principalId, 'CosmosDBDataContributor')
-  scope: cosmos
+resource cosmosRole 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2023-04-15' = {
+  name: guid(cosmosId, identityPrincipalId, databaseName, 'CosmosDBDataContributor')
+  parent: cosmos
   properties: {
-    principalId: principalId
-    principalType: 'ServicePrincipal'
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'b24988ac-6180-42a0-ab88-20f7382dd24c')
+    principalId: identityPrincipalId
+    roleDefinitionId: '${cosmos.id}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002'
+    scope: '${cosmos.id}/dbs/${databaseName}'
   }
 }

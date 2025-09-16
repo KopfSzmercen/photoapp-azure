@@ -4,7 +4,7 @@ param location string = resourceGroup().location
 param env string = 'dev'
 param prefix string = 'photoapp'
 param apiAlwaysOn bool = false
-
+param databaseName string
 
 module storage './modules/storage.bicep' = {
   name: 'storage'
@@ -21,6 +21,7 @@ module cosmos './modules/cosmosdb.bicep' = {
     prefix: prefix
     location: location
     env: env
+    databaseName: databaseName
   }
 }
 
@@ -72,5 +73,7 @@ module roleAssignments './modules/roleassignments.bicep' = {
     storageId: storage.outputs.name
     kvId: kv.outputs.name
     cosmosId: cosmos.outputs.name
+    databaseName: databaseName
+    identityPrincipalId: id.outputs.identiyPrincipalId
   }
 }
